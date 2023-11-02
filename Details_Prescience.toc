@@ -4,7 +4,9 @@
 ## RequiredDeps: Details
 ## OptionalDeps: Ace3
 
-## X-Wago-ID: Rn6VJW6d
+## X-Wago-ID: 56n9zWN9
+## X-Curse-Project-ID: 931911
+
 
 #@no-lib-strip@
 embeds.xml
