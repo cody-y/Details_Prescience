@@ -1,0 +1,9 @@
+{
+    "Lua.diagnostics.globals": [
+        "SlashCmdList",
+        "class",
+        "NAME",
+        "ROLE",
+        "CLASS"
+    ]
+}

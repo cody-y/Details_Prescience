@@ -1,0 +1,13 @@
+## Interface: 100107
+## Title: Details!: Prescience (plugin)
+## Notes: Threat meter plugin, show threat for group members in the window. Select it from the Plugin menu in the Orange Cogwheel.
+## RequiredDeps: Details
+## OptionalDeps: Ace3
+
+## X-Wago-ID: Rn6VJW6d
+
+#@no-lib-strip@
+embeds.xml
+#@end-no-lib-strip@
+
+Details_Prescience.lua
