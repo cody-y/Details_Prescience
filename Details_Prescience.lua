@@ -308,6 +308,7 @@ local function CreatePluginFrames(data)
 				_table_sort(combat, sort)
 
 				local index = 1
+				local payloadIndex = 1
 				local lastIndex = #Prescience.ShownRows
 				local payload = {}
 
@@ -321,67 +322,74 @@ local function CreatePluginFrames(data)
 					if actor and (actor[ROLE] == "DAMAGER" or _G.PrescienceDebug) then
 						debug("updating row " .. index .. " with " .. actor[NAME])
 
-						local rankText = index .. ". "
-						thisRow:SetLeftText(rankText .. Prescience:GetOnlyName(actor[NAME]))
-						local dps = 0
-						local dps_table = actor[DPS_TABLE]
-						for i = combatTime, combatTime + Prescience.saveddata.dps_window do
-							if dps_table[i] then
-								dps = dps + dps_table[i]
-							end
-						end
-						dps = dps / Prescience.saveddata.dps_window
-						dps = _math_floor(dps + 0.5)
-
-						-- now we calculate the percentage as if 1st was 100% of the damage
-						local percent = 0
-						if combat[1] then
-							local topDps = 0
-							local topDpsTable = combat[1][DPS_TABLE]
+						-- if they're no longer in the raid we can ignore them
+						if not _UnitGroupRolesAssigned(actor[NAME]) then
+							debug(actor[NAME] .. " is no longer in the raid")
+							thisRow:Hide()
+						else
+							local rankText = index .. ". "
+							thisRow:SetLeftText(rankText .. Prescience:GetOnlyName(actor[NAME]))
+							local dps = 0
+							local dps_table = actor[DPS_TABLE]
 							for i = combatTime, combatTime + Prescience.saveddata.dps_window do
-								if topDpsTable[i] then
-									topDps = topDps + topDpsTable[i]
+								if dps_table[i] then
+									dps = dps + dps_table[i]
 								end
 							end
-							topDps = topDps / Prescience.saveddata.dps_window
-							topDps = _math_floor(topDps + 0.5)
-							percent = dps / topDps
-						end
-
-						if percent > 1 then
-							percent = 1
-						elseif percent < 0 then
-							percent = 0
-						end
-						thisRow:SetValue(percent * 100)
-						thisRow:SetRightText(Prescience:ToK2(dps))
-
-						payload[index] = {
-							name = actor[NAME],
-							dps = dps,
-							role = actor[ROLE],
-							class = actor[CLASS],
-							spec = actor[SPEC],
-							percent = floor(percent * 100)
-						}
-
-						local color = RAID_CLASS_COLORS[actor[CLASS]]
-						if (color) then
-							thisRow:SetColor(color.r, color.g, color.b, 1)
-						else
-							thisRow:SetColor(1, 1, 1, 1)
-						end
-
-						if actor[5] then
-							local specIcon = select(4, GetSpecializationInfoForSpecID(actor[SPEC]))
-							if specIcon then
-								thisRow.statusbar.icontexture:SetSize(thisRow:GetHeight(), thisRow:GetHeight())
-								thisRow:SetIcon(specIcon)
+							dps = dps / Prescience.saveddata.dps_window
+							dps = _math_floor(dps + 0.5)
+	
+							-- now we calculate the percentage as if 1st was 100% of the damage
+							local percent = 0
+							if combat[1] then
+								local topDps = 0
+								local topDpsTable = combat[1][DPS_TABLE]
+								for i = combatTime, combatTime + Prescience.saveddata.dps_window do
+									if topDpsTable[i] then
+										topDps = topDps + topDpsTable[i]
+									end
+								end
+								topDps = topDps / Prescience.saveddata.dps_window
+								topDps = _math_floor(topDps + 0.5)
+								percent = dps / topDps
 							end
-						end
-
-						if (not thisRow.statusbar:IsShown()) then
-							thisRow:Show()
+	
+							if percent > 1 then
+								percent = 1
+							elseif percent < 0 then
+								percent = 0
+							end
+							thisRow:SetValue(percent * 100)
+							thisRow:SetRightText(Prescience:ToK2(dps))
+	
+							payload[payloadIndex] = {
+								name = actor[NAME],
+								dps = dps,
+								role = actor[ROLE],
+								class = actor[CLASS],
+								spec = actor[SPEC],
+								percent = floor(percent * 100)
+							}
+							payloadIndex = payloadIndex + 1
+	
+							local color = RAID_CLASS_COLORS[actor[CLASS]]
+							if (color) then
+								thisRow:SetColor(color.r, color.g, color.b, 1)
+							else
+								thisRow:SetColor(1, 1, 1, 1)
+							end
+	
+							if actor[5] then
+								local specIcon = select(4, GetSpecializationInfoForSpecID(actor[SPEC]))
+								if specIcon then
+									thisRow.statusbar.icontexture:SetSize(thisRow:GetHeight(), thisRow:GetHeight())
+									thisRow:SetIcon(specIcon)
+								end
+							end
+	
+							if (not thisRow.statusbar:IsShown()) then
+								thisRow:Show()
+							end
 						end
 					else
 						thisRow:Hide()
