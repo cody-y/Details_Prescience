@@ -15,7 +15,7 @@ local DETAILS_ATTRIBUTE_DAMAGE = DETAILS_ATTRIBUTE_DAMAGE
 local DF = DetailsFramework
 _G.PrescienceDB = _G.PrescienceDB or {}
 local PrescienceDB = _G.PrescienceDB
-_G.PrescienceDebug = true
+_G.PrescienceDebug = false
 local debug = function(str)
 	if (_G.PrescienceDebug) then
 		print("|cFFFF0000Prescience:|r " .. str)
@@ -295,7 +295,7 @@ local function CreatePluginFrames(data)
 					if thisCombat
 						and thisCombat.time
 						and thisCombat.time >= (combatTime + Prescience.saveddata.dps_window + Prescience.saveddata.forward_skip)
-						and thisCombat.encounterID == Prescience.encounterID then
+						and thisCombat.encounterID == Prescience.encounterID or _G.PrescienceDebug then
 							debug("found combat " .. i)
 						combat = thisCombat.players
 						break
