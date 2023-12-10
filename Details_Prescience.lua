@@ -502,6 +502,11 @@ end
 
 local build_options_panel = function()
 	local options_frame = Prescience:CreatePluginOptionsFrame("PrescienceOptionsWindow", "Prescience Options", 1)
+	local options_text_template = DF:GetTemplate ("font", "OPTIONS_FONT_TEMPLATE")
+	local options_dropdown_template = DF:GetTemplate ("dropdown", "OPTIONS_DROPDOWN_TEMPLATE")
+	local options_switch_template = DF:GetTemplate ("switch", "OPTIONS_CHECKBOX_TEMPLATE")
+	local options_slider_template = DF:GetTemplate ("slider", "OPTIONS_SLIDER_TEMPLATE")
+	local options_button_template = DF:GetTemplate ("button", "OPTIONS_BUTTON_TEMPLATE")
 
 	local menu = {
 		{
@@ -535,7 +540,9 @@ local build_options_panel = function()
 		},
 	}
 
-	Details.gump:BuildMenu(options_frame, menu, 15, -35, 160)
+	--Details.gump:BuildMenu(options_frame, menu, 15, -35, 160)
+	--Vanguard:GetFramework():BuildMenu (options_frame, menu, 15, -50, 460, true, options_text_template, options_dropdown_template, options_switch_template, true, options_slider_template, options_button_template)
+	Details.gump:BuildMenu(options_frame, menu, 15, -35, 160, true, options_text_template, options_dropdown_template, options_switch_template, true, options_slider_template, options_button_template)
 	options_frame:SetHeight(160)
 end
 
